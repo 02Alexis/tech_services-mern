@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
+import equipmentTypeRoutes from "./modules/equipment-types/equipmentType.routes.js";
 
 import authRoutes from "./modules/auth/auth.routes.js";
 import { env } from "./config/env.js";
@@ -19,6 +20,7 @@ app.use(
 );
 
 app.use("/api/auth", authRoutes);
+app.use("/api/equipment-types", equipmentTypeRoutes);
 
 app.get("/", (req, res) => {
 
