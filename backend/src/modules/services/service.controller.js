@@ -1,4 +1,4 @@
-import * as service from "./service.service.js";
+import * as serviceModule from "./service.service.js";
 
 import {
   generateServiceCode
@@ -31,7 +31,7 @@ export const create = async (
     };
 
     const result =
-      await service.createService(
+      await serviceModule.createService(
         data
       );
 
@@ -53,7 +53,7 @@ export const getAll =
   async (req, res) => {
 
     const data =
-      await service.getServices();
+      await serviceModule.getServices();
 
     res.json(data);
 
@@ -63,7 +63,7 @@ export const getOne =
   async (req, res) => {
 
     const data =
-      await service.getServiceById(
+      await serviceModule.getServiceById(
         req.params.id
       );
 
@@ -75,7 +75,7 @@ export const update =
   async (req, res) => {
 
     const data =
-      await service.updateService(
+      await serviceModule.updateService(
         req.params.id,
         req.body
       );
@@ -87,12 +87,52 @@ export const update =
 export const remove =
   async (req, res) => {
 
-    await service.deleteService(
+    await serviceModule.deleteService(
       req.params.id
     );
 
     res.json({
       message: "Eliminado"
     });
+
+  };
+
+// 
+export const changeStatus =
+  async (req, res) => {
+
+    try {
+
+      const service =
+        await serviceModule.updateStatus(
+          req.params.id,
+          req.body.status,
+          req.user.id
+        );
+
+      res.json(service);
+
+    } catch (error) {
+
+      res.status(400).json({
+        message: error.message
+      });
+
+    }
+
+  };
+
+// 
+
+export const createObservation =
+  async (req, res) => {
+
+    const service =
+      await serviceModule.addObservation(
+        req.params.id,
+        req.body.text
+      );
+
+    res.json(service);
 
   };

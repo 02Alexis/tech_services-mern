@@ -61,3 +61,65 @@ export const deleteService =
       .findByIdAndDelete(id);
 
   };
+
+// metodos updatestatus
+
+export const updateStatus =
+  async (
+    serviceId,
+    status,
+    userId
+  ) => {
+
+    const service =
+      await ServiceOrder.findById(
+        serviceId
+      );
+
+    if (!service) {
+      throw new Error(
+        "Servicio no encontrado"
+      );
+    }
+
+    service.status = status;
+
+    service.timeline.push({
+      status,
+      user: userId
+    });
+
+    if (
+      status === "finalized"
+    ) {
+      service.finalizedAt =
+        new Date();
+    }
+
+    await service.save();
+
+    return service;
+
+  };
+
+// 
+export const addObservation =
+  async (
+    serviceId,
+    text
+  ) => {
+
+    const service =
+      await ServiceOrder.findById(
+        serviceId
+      );
+
+    service.observations.push({
+      text
+    });
+
+    await service.save();
+
+    return service;
+
+  };

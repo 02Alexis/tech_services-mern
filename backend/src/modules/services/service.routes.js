@@ -5,7 +5,9 @@ import {
   getAll,
   getOne,
   update,
-  remove
+  remove,
+  changeStatus,
+  createObservation
 } from "./service.controller.js";
 
 import {
@@ -25,5 +27,9 @@ router.post("/", create);
 router.put("/:id", update);
 
 router.delete("/:id", remove);
+
+router.patch("/:id/status", changeStatus);
+
+router.post("/:id/observations", createObservation);
 
 export default router;
