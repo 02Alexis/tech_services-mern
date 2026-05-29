@@ -1,18 +1,28 @@
-import ServiceOrder from "../modules/services/service.model.js";
+import Counter from "../modules/services/counter.model.js";
 
 export const generateServiceCode =
   async () => {
 
-    const total =
-      await ServiceOrder.countDocuments();
+    const counter =
+      await Counter.findOneAndUpdate(
+        {
+          name: "service_order"
+        },
+        {
+          $inc: {
+            sequence: 1
+          }
+        },
+        {
+          new: true,
+          upsert: true
+        }
+      );
 
     const year =
       new Date().getFullYear();
 
-    const sequence =
-      String(total + 1)
-        .padStart(5, "0");
-
-    return `SRV-${year}-${sequence}`;
-
+    return `SRV-${year}-${String(
+      counter.sequence
+    ).padStart(6, "0")}`;
   };
