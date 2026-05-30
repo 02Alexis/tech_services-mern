@@ -7,7 +7,10 @@ import {
   update,
   remove,
   changeStatus,
-  createObservation
+  createObservation,
+  dashboard,
+  search,
+  timeline
 } from "./service.controller.js";
 
 import {
@@ -20,6 +23,16 @@ router.use(authMiddleware);
 
 router.get("/", getAll);
 
+router.get("/dashboard", dashboard);
+
+router.get("/search", search);
+
+router.get("/:id/timeline", timeline);
+
+router.patch("/:id/status", changeStatus);
+
+router.post("/:id/observations", createObservation);
+
 router.get("/:id", getOne);
 
 router.post("/", create);
@@ -27,9 +40,5 @@ router.post("/", create);
 router.put("/:id", update);
 
 router.delete("/:id", remove);
-
-router.patch("/:id/status", changeStatus);
-
-router.post("/:id/observations", createObservation);
 
 export default router;

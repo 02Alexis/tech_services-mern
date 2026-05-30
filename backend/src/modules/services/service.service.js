@@ -123,3 +123,187 @@ export const addObservation =
     return service;
 
   };
+
+// dashboard
+export const getDashboardStats =
+  async () => {
+
+    const totalServices =
+      await ServiceOrder.countDocuments();
+
+    const entry =
+      await ServiceOrder.countDocuments({
+        status: "entry"
+      });
+
+    const process =
+      await ServiceOrder.countDocuments({
+        status: "process"
+      });
+
+    const wait =
+      await ServiceOrder.countDocuments({
+        status: "wait"
+      });
+
+    const finalized =
+      await ServiceOrder.countDocuments({
+        status: "finalized"
+      });
+
+    const today = new Date();
+
+    today.setHours(
+      0,
+      0,
+      0,
+      0
+    );
+
+    const todayEntries =
+      await ServiceOrder.countDocuments({
+        createdAt: {
+          $gte: today
+        }
+      });
+
+    const firstDayMonth =
+      new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        1
+      );
+
+    const monthEntries =
+      await ServiceOrder.countDocuments({
+        createdAt: {
+          $gte: firstDayMonth
+        }
+      });
+
+    return {
+      totalServices,
+      entry,
+      process,
+      wait,
+      finalized,
+      todayEntries,
+      monthEntries
+    };
+
+  };
+
+// busquedas avanzadas
+export const searchServices =
+  async (
+    page = 1,
+    limit = 10,
+    search = "",
+    status = ""
+  ) => {
+
+    const query = {};
+
+    if (status) {
+      query.status = status;
+    }
+
+    if (search) {
+
+      query.$or = [
+
+        {
+          code: {
+            $regex: search,
+            $options: "i"
+          }
+        },
+
+        {
+          "customer.name": {
+            $regex: search,
+            $options: "i"
+          }
+        },
+
+        {
+          "customer.phone": {
+            $regex: search,
+            $options: "i"
+          }
+        }
+
+      ];
+
+    }
+
+    const total =
+      await ServiceOrder.countDocuments(
+        query
+      );
+
+    const data =
+      await ServiceOrder.find(query)
+        .populate(
+          "equipmentType",
+          "name"
+        )
+        .sort({
+          createdAt: -1
+        })
+        .skip(
+          (page - 1) * limit
+        )
+        .limit(limit);
+
+    return {
+
+      data,
+
+      pagination: {
+
+        total,
+
+        page,
+
+        limit,
+
+        totalPages:
+          Math.ceil(
+            total / limit
+          )
+
+      }
+
+    };
+
+  };
+
+// historial completo
+export const getTimeline =
+  async (serviceId) => {
+
+    console.log(
+      "Buscando servicio:",
+      serviceId
+    );
+
+    const result =
+      await ServiceOrder
+        .findById(serviceId)
+        .populate(
+          "timeline.user",
+          "name"
+        )
+        .select(
+          "code timeline"
+        );
+
+    console.log(
+      "Resultado:",
+      result
+    );
+
+    return result;
+
+  };

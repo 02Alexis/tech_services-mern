@@ -123,7 +123,6 @@ export const changeStatus =
   };
 
 // 
-
 export const createObservation =
   async (req, res) => {
 
@@ -134,5 +133,73 @@ export const createObservation =
       );
 
     res.json(service);
+
+  };
+
+  // Dashboard Controller
+export const dashboard =
+  async (req, res) => {
+
+    const stats =
+      await serviceModule.getDashboardStats();
+
+    res.json(stats);
+
+  };
+
+// Controller búsqueda
+export const search =
+  async (req, res) => {
+
+    const page =
+      Number(
+        req.query.page
+      ) || 1;
+
+    const limit =
+      Number(
+        req.query.limit
+      ) || 10;
+
+    const searchText =
+      req.query.search || "";
+
+    const status =
+      req.query.status || "";
+
+    const data =
+      await serviceModule.searchServices(
+        page,
+        limit,
+        searchText,
+        status
+      );
+
+    res.json(data);
+
+  };
+
+// historial completo 
+export const timeline =
+  async (req, res) => {
+
+    try {
+
+      const data =
+        await serviceModule.getTimeline(
+          req.params.id
+        );
+
+      res.json(data);
+
+    } catch (error) {
+
+      console.error(error);
+
+      res.status(500).json({
+        message: error.message
+      });
+
+    }
 
   };
