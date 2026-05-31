@@ -9,7 +9,8 @@ import {
 } from "./equipmentType.controller.js";
 
 import {
-  authMiddleware
+  authMiddleware,
+  roleMiddleware
 } from "../../middlewares/auth.middleware.js";
 
 const router = Router();
@@ -29,18 +30,21 @@ router.get(
 router.post(
   "/",
   authMiddleware,
+  roleMiddleware("admin"),
   create
 );
 
 router.put(
   "/:id",
   authMiddleware,
+  roleMiddleware("admin"),
   update
 );
 
 router.delete(
   "/:id",
   authMiddleware,
+  roleMiddleware("admin"),
   remove
 );
 

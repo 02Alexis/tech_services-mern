@@ -61,6 +61,11 @@ const serviceOrderSchema =
         }
       ],
 
+      updatedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+      },
+
       timeline: [
         {
           status: String,
@@ -80,6 +85,11 @@ const serviceOrderSchema =
       createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
+      },
+
+      isDeleted: {
+        type: Boolean,
+        default: false
       },
 
       finalizedAt: Date
