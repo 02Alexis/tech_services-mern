@@ -1,0 +1,25 @@
+export const upload = async (req, res) => {
+  try {
+    const image = await uploadImage(
+      req.file,
+
+      req.body.serviceOrder,
+
+      req.user.id,
+
+      req.body.description,
+    );
+
+    res.status(201).json(image);
+  } catch (error) {
+    res.status(400).json({
+      message: error.message,
+    });
+  }
+};
+
+export const getByService = async (req, res) => {
+  const images = await getImages(req.params.serviceId);
+
+  res.json(images);
+};

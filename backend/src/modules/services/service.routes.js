@@ -10,7 +10,8 @@ import {
   createObservation,
   dashboard,
   search,
-  timeline
+  timeline,
+  downloadPdf
 } from "./service.controller.js";
 
 import {
@@ -26,6 +27,8 @@ router.get("/", getAll);
 router.get("/dashboard", dashboard);
 
 router.get("/search", search);
+
+router.get("/:id/pdf", downloadPdf);
 
 router.get("/:id/timeline", timeline);
 

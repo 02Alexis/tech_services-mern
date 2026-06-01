@@ -5,47 +5,21 @@ import {
   getAll,
   getOne,
   update,
-  remove
+  remove,
 } from "./equipmentType.controller.js";
-
-import {
-  authMiddleware,
-  roleMiddleware
-} from "../../middlewares/auth.middleware.js";
+import { authMiddleware } from "../../middlewares/auth.middleware.js";
+import { roleMiddleware } from "../../middlewares/role.middleware.js";
 
 const router = Router();
 
-router.get(
-  "/",
-  authMiddleware,
-  getAll
-);
+router.get("/", authMiddleware, getAll);
 
-router.get(
-  "/:id",
-  authMiddleware,
-  getOne
-);
+router.get("/:id", authMiddleware, getOne);
 
-router.post(
-  "/",
-  authMiddleware,
-  roleMiddleware("admin"),
-  create
-);
+router.post("/", authMiddleware, roleMiddleware("admin"), create);
 
-router.put(
-  "/:id",
-  authMiddleware,
-  roleMiddleware("admin"),
-  update
-);
+router.put("/:id", authMiddleware, roleMiddleware("admin"), update);
 
-router.delete(
-  "/:id",
-  authMiddleware,
-  roleMiddleware("admin"),
-  remove
-);
+router.delete("/:id", authMiddleware, roleMiddleware("admin"), remove);
 
 export default router;
