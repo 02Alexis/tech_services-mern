@@ -1,17 +1,23 @@
+import { motion } from "framer-motion";
 import useServices from "../features/services/useServices";
 import ServicesTable from "../components/ServicesTable";
 import ServiceFilters from "../components/ServiceFilters";
+import Spinner from "../components/Spinner";
 
 export default function ServicesPage() {
   const { services, loading, search, setSearch, status, setStatus } =
     useServices();
 
   if (loading) {
-    return <h2>Cargando...</h2>;
+    return <Spinner />;
   }
 
   return (
-    <div>
+    <motion.div 
+    initial={{y: 30, opacity: 0}}
+    whileInView={{y: 0, opacity: 1}}
+    transition={{duration: 0.6}}
+    viewport={{once: true}}>
       <div
         className="
           flex
@@ -20,14 +26,14 @@ export default function ServicesPage() {
           mb-6
         "
       >
-        <h1
-          className="
-            text-2xl
-            font-bold
-          "
-        >
-          Servicios
-        </h1>
+        <motion.h2
+      initial={{y: 20, opacity: 0}}
+      whileInView={{y: 0, opacity: 1}}
+      transition={{duration: 0.5}}
+      viewport={{once: true}}
+      className="text-xl font-bold mb-2">
+        Servicios
+      </motion.h2>
 
         <button
           className="
@@ -48,6 +54,6 @@ export default function ServicesPage() {
         setStatus={setStatus}
       />
       <ServicesTable services={services} />
-    </div>
+    </motion.div>
   );
 }
