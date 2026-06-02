@@ -5,30 +5,13 @@ import Header from "../components/Header";
 
 export default function MainLayout() {
   return (
-    <div
-      style={{
-        display: "flex",
-        height: "100vh",
-      }}
-    >
+    <div className="flex h-screen">
       <Sidebar />
 
-      <div
-        style={{
-          flex: 1,
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
+      <div className="flex flex-1 flex-col overflow-hidden">
         <Header />
 
-        <main
-          style={{
-            flex: 1,
-            padding: "20px",
-            overflow: "auto",
-          }}
-        >
+        <main className="flex-1 overflow-y-auto p-6">
           <Outlet />
         </main>
       </div>

@@ -1,6 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Outfit:wght@100..900&display=swap');
 @import "tailwindcss";
 
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  @apply bg-slate-100 text-slate-800;
+}
 
 *{
     font-family: "Manrope", sans-serif;

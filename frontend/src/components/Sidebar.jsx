@@ -1,33 +1,106 @@
-import { Link } from "react-router-dom";
+import { LayoutDashboard, Wrench, Users, Cpu, LogOut } from "lucide-react";
+import { NavLink, useNavigate } from "react-router-dom";
+import useAuthStore from "../store/authStore";
 
 export default function Sidebar() {
+  const navigate = useNavigate();
+
+  const logout = useAuthStore((state) => state.logout);
+
+  const handleLogout = () => {
+    logout();
+
+    navigate("/login");
+  };
+
+  const linkClass = ({ isActive }) =>
+    `flex items-center gap-3 px-4 py-3 rounded-lg transition
+      ${
+        isActive
+          ? "bg-blue-600 text-white"
+          : "text-slate-300 hover:bg-slate-800"
+      }`;
+
   return (
     <aside
-      style={{
-        width: "240px",
-        background: "var(--color-primary)",
-        color: "white",
-        padding: "20px",
-      }}
+      className="
+        w-64
+        bg-slate-900
+        text-white
+        flex
+        flex-col
+      "
     >
-      <h2>Tech Services</h2>
+      <div
+        className="
+          p-6
+          border-b
+          border-slate-800
+        "
+      >
+        <h2
+          className="
+            text-xl
+            font-bold
+          "
+        >
+          Tech Services
+        </h2>
+      </div>
 
       <nav
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "10px",
-          marginTop: "20px",
-        }}
+        className="
+          flex-1
+          p-4
+          space-y-2
+        "
       >
-        <Link to="/">Dashboard</Link>
+        <NavLink to="/" className={linkClass}>
+          <LayoutDashboard size={18} />
+          Dashboard
+        </NavLink>
 
-        <Link to="/services">Servicios</Link>
+        <NavLink to="/services" className={linkClass}>
+          <Wrench size={18} />
+          Servicios
+        </NavLink>
 
-        <Link to="/equipment-types">Tipos Equipo</Link>
+        <NavLink to="/equipment-types" className={linkClass}>
+          <Cpu size={18} />
+          Tipos Equipo
+        </NavLink>
 
-        <Link to="/users">Usuarios</Link>
+        <NavLink to="/users" className={linkClass}>
+          <Users size={18} />
+          Usuarios
+        </NavLink>
       </nav>
+
+      <div
+        className="
+          p-4
+          border-t
+          border-slate-800
+        "
+      >
+        <button
+          onClick={handleLogout}
+          className="
+            w-full
+            flex
+            items-center
+            gap-3
+            px-4
+            py-3
+            rounded-lg
+            text-red-400
+            hover:bg-slate-800
+          "
+        >
+          <LogOut size={18} />
+          Salir
+        </button>
+      </div>
     </aside>
   );
 }
