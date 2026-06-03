@@ -17,3 +17,11 @@ export const getServiceById = async (id) => {
 
   return response.data;
 };
+
+export const updateServiceStatus = async (id, status) => {
+  const response = await api.patch(`/services/${id}/status`, {
+    status,
+  });
+
+  return response.data;
+};
