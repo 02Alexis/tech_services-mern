@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import {
   getServiceById,
   updateServiceStatus,
+  createObservation,
 } from "../features/services/service.api";
 import { fieldLabels } from "../config/fieldLabels";
 import toast from "react-hot-toast";
@@ -13,6 +14,7 @@ const ServiceDetailPage = () => {
   const { id } = useParams();
 
   const [service, setService] = useState(null);
+  const [observation, setObservation] = useState("");
   const [loading, setLoading] = useState(true);
 
   const loadService = async () => {
@@ -44,6 +46,24 @@ const ServiceDetailPage = () => {
       toast.error(
         error?.response?.data?.message || "Error al actualizar estado",
       );
+    }
+  };
+
+  const handleObservation = async () => {
+    if (!observation.trim()) {
+      return;
+    }
+
+    try {
+      await createObservation(id, observation);
+
+      toast.success("Observación agregada");
+
+      setObservation("");
+
+      await loadService();
+    } catch {
+      toast.error("Error al guardar");
     }
   };
 
@@ -300,6 +320,96 @@ const ServiceDetailPage = () => {
             </div>
           ))}
         </div>
+      </div>
+
+      {/* observaciones */}
+      <div
+        className="
+            bg-white
+            border
+            rounded-xl
+            p-6
+        "
+      >
+        <h2
+          className="
+            text-lg
+            font-semibold
+            mb-6
+        "
+        >
+          Observaciones
+        </h2>
+
+        <div
+          className="
+            space-y-4
+            mb-6
+        "
+        >
+          {service.observations?.length > 0 ? (
+            service.observations.map((item) => (
+              <div
+                key={item._id}
+                className="
+                border
+                rounded-lg
+                p-4
+            "
+              >
+                <p>{item.text}</p>
+
+                <p
+                  className="
+                    text-xs
+                    text-slate-500
+                    mt-2
+                "
+                >
+                  {new Date(item.createdAt).toLocaleString()}
+                </p>
+              </div>
+            ))
+          ) : (
+            <p
+              className="
+            text-slate-500
+            "
+            >
+              No hay observaciones
+            </p>
+          )}
+        </div>
+
+        <textarea
+          value={observation}
+          onChange={(e) => setObservation(e.target.value)}
+          rows={4}
+          placeholder="
+            Escribe una observación...
+        "
+          className="
+            w-full
+            border
+            rounded-lg
+            p-3
+        "
+        />
+
+        <button
+          onClick={handleObservation}
+          className="
+            mt-4
+            bg-blue-600
+            text-white
+            px-5
+            py-2
+            rounded-lg
+            hover:bg-blue-700
+        "
+        >
+          Agregar Observación
+        </button>
       </div>
     </div>
   );

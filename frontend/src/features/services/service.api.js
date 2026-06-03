@@ -25,3 +25,11 @@ export const updateServiceStatus = async (id, status) => {
 
   return response.data;
 };
+
+export const createObservation = async (id, text) => {
+  const response = await api.post(`/services/${id}/observations`, {
+    text,
+  });
+
+  return response.data;
+};
