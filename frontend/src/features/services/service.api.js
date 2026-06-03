@@ -1,11 +1,13 @@
 import api from "../../api/axios";
 
-export const getServices =
-  async () => {
+export const getServices = async () => {
+  const response = await api.get("/services");
 
-    const response =
-      await api.get("/services");
+  return response.data;
+};
 
-    return response.data;
+export const createService = async (payload) => {
+  const response = await api.post("/services", payload);
 
-  };
+  return response.data;
+};
