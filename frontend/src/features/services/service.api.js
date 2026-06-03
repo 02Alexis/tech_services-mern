@@ -11,3 +11,9 @@ export const createService = async (payload) => {
 
   return response.data;
 };
+
+export const getServiceById = async (id) => {
+  const response = await api.get(`/services/${id}`);
+
+  return response.data;
+};

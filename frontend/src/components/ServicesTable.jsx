@@ -1,7 +1,10 @@
+import { useNavigate } from "react-router-dom";
 import { statusMap } from "../utils/serviceStatus";
 import { motion } from "framer-motion";
 
 const ServicesTable = ({ services }) => {
+  const navigate = useNavigate();
+
   return (
     <motion.div
       initial={{ y: 30, opacity: 0 }}
@@ -60,7 +63,20 @@ const ServicesTable = ({ services }) => {
                   {new Date(service.createdAt).toLocaleDateString()}
                 </td>
 
-                <td className="p-4">Ver</td>
+                <td className="p-4">
+                  {" "}
+                  <button
+                    onClick={() => navigate(`/services/${service._id}`)}
+                    className="
+                    cursor-pointer
+                      text-blue-600
+                      hover:text-blue-700
+                      transition-colors
+                    "
+                  >
+                    Ver
+                  </button>
+                </td>
               </motion.tr>
             ))}
           </tbody>
