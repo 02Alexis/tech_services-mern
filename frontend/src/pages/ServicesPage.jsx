@@ -61,6 +61,15 @@ export default function ServicesPage() {
         status={status}
         setStatus={setStatus}
       />
+      <p
+        className="
+          text-sm
+          text-slate-500
+          mb-4
+        "
+      >
+        {services.length} resultado(s)
+      </p>
       <ServicesTable services={services} />
     </motion.div>
   );

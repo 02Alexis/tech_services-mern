@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Search } from "lucide-react";
 
 const ServiceFilters = ({ search, setSearch, status, setStatus }) => {
   return (
@@ -9,31 +10,84 @@ const ServiceFilters = ({ search, setSearch, status, setStatus }) => {
       viewport={{ once: true }}
       className="
         bg-white
-        p-4
-        rounded-xl
         border
-        mb-5
+        rounded-xl
+        p-4
+        mb-6
       "
     >
-      <div className="mb-4">
-        <input
-          type="text"
-          placeholder="Buscar cliente..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="w-full border mt-1 border-gray-700/70 outline-none rounded p-2"
-        />
-      </div>
-      <div className="flex gap-2 mt-4">
-        <button onClick={() => setStatus("all")}>Todos</button>
+      <div
+        className="
+          grid
+          md:grid-cols-2
+          gap-4
+        "
+      >
+        <div className="relative">
+          <Search
+            size={18}
+            className="
+              absolute
+              left-3
+              top-3
+              text-slate-400
+            "
+          />
 
-        <button onClick={() => setStatus("entry")}>Ingreso</button>
+          <input
+            type="text"
+            value={search}
+            onChange={(e) =>
+              setSearch(e.target.value)
+            }
+            placeholder="
+              Código, cliente o teléfono...
+            "
+            className="
+              w-full
+              border
+              rounded-lg
+              pl-10
+              pr-4
+              py-2
+              outline-none
+            "
+          />
+        </div>
 
-        <button onClick={() => setStatus("process")}>Proceso</button>
+        <select
+          value={status}
+          onChange={(e) =>
+            setStatus(e.target.value)
+          }
+          className="
+            border
+            rounded-lg
+            px-4
+            py-2
+            outline-none
+          "
+        >
+          <option value="">
+            Todos los estados
+          </option>
 
-        <button onClick={() => setStatus("wait")}>Espera</button>
+          <option value="entry">
+            Ingreso
+          </option>
 
-        <button onClick={() => setStatus("finalized")}>Finalizado</button>
+          <option value="process">
+            Proceso
+          </option>
+
+          <option value="wait">
+            Espera
+          </option>
+
+          <option value="finalized">
+            Finalizado
+          </option>
+        </select>
       </div>
     </motion.div>
   );
