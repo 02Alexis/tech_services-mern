@@ -4,6 +4,7 @@ import {
   getServiceById,
   updateServiceStatus,
   createObservation,
+  downloadPdf,
 } from "../features/services/service.api";
 import { fieldLabels } from "../config/fieldLabels";
 import toast from "react-hot-toast";
@@ -67,6 +68,32 @@ const ServiceDetailPage = () => {
     }
   };
 
+  const handleDownloadPdf = async () => {
+    try {
+      const pdfBlob = await downloadPdf(id);
+
+      const url = window.URL.createObjectURL(pdfBlob);
+
+      const link = document.createElement("a");
+
+      link.href = url;
+
+      link.download = `${service.code}.pdf`;
+
+      document.body.appendChild(link);
+
+      link.click();
+
+      link.remove();
+
+      window.URL.revokeObjectURL(url);
+
+      toast.success("PDF descargado");
+    } catch {
+      toast.error("Error al descargar PDF");
+    }
+  };
+
   const nextStatus = {
     entry: "process",
     process: "wait",
@@ -93,31 +120,60 @@ const ServiceDetailPage = () => {
     <div className="space-y-6">
       {/* Header */}
       <div
+  className="
+    bg-white
+    border
+    rounded-xl
+    p-6
+  "
+>
+  <div
+    className="
+      flex
+      flex-col
+      md:flex-row
+      md:items-center
+      md:justify-between
+      gap-4
+    "
+  >
+    <div>
+      <h1
         className="
-          bg-white
-          border
-          rounded-xl
-          p-6
+          text-2xl
+          font-bold
         "
       >
-        <h1
-          className="
-            text-2xl
-            font-bold
-          "
-        >
-          {service.code}
-        </h1>
+        {service.code}
+      </h1>
 
-        <p
-          className="
-            text-slate-500
-            mt-2
-          "
-        >
-          {service.equipmentType?.name}
-        </p>
-      </div>
+      <p
+        className="
+          text-slate-500
+          mt-2
+        "
+      >
+        {service.equipmentType?.name}
+      </p>
+    </div>
+
+    <button
+      onClick={
+        handleDownloadPdf
+      }
+      className="
+        bg-red-600
+        hover:bg-red-700
+        text-white
+        px-5
+        py-2
+        rounded-lg
+      "
+    >
+      Descargar PDF
+    </button>
+  </div>
+</div>
 
       {/* Cliente */}
       <div

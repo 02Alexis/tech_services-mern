@@ -33,3 +33,11 @@ export const createObservation = async (id, text) => {
 
   return response.data;
 };
+
+export const downloadPdf = async (id) => {
+  const response = await api.get(`/services/${id}/pdf`, {
+    responseType: "blob",
+  });
+
+  return response.data;
+};
