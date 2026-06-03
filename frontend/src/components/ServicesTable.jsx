@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { statusMap } from "../utils/serviceStatus";
 import { motion } from "framer-motion";
+import { statusBadge } from "../utils/statusBadge";
+import { Eye } from "lucide-react";
 
 const ServicesTable = ({ services }) => {
   const navigate = useNavigate();
@@ -34,51 +36,85 @@ const ServicesTable = ({ services }) => {
             "
             >
               <th className="p-4 text-left">Código</th>
-
               <th className="p-4 text-left">Cliente</th>
-
+              <th className="p-4 text-left">Teléfono</th>
+              <th className="p-4 text-left">Equipo</th>
               <th className="p-4 text-left">Estado</th>
-
               <th className="p-4 text-left">Fecha</th>
-
               <th className="p-4 text-left">Acción</th>
             </tr>
           </thead>
 
           <tbody>
-            {services.map((service) => (
-              <motion.tr
-                key={service._id}
-                className="hover:bg-slate-50"
-                initial="hidden"
-                animate="visible"
-              >
-                <td className="p-4">{service.code}</td>
-
-                <td className="p-4">{service.customer?.name}</td>
-
-                <td className="p-4">{statusMap[service.status]}</td>
-
-                <td className="p-4">
-                  {new Date(service.createdAt).toLocaleDateString()}
+            {services.length === 0 ? (
+              <tr>
+                <td
+                  colSpan="7"
+                  className="
+                    text-center
+                    py-10
+                    text-slate-500
+                  "
+                >
+                  No se encontraron servicios
                 </td>
+              </tr>
+            ) : (
+              services.map((service) => (
+                <motion.tr
+                  key={service._id}
+                  className="hover:bg-slate-50"
+                  initial="hidden"
+                  animate="visible"
+                >
+                  <td className="p-4">{service.code}</td>
+                  <td className="p-4">{service.customer?.name}</td>
+                  <td className="p-4">{service.customer?.phone}</td>
+                  <td className="p-4">{service.equipmentType?.name}</td>
+                  <td className="p-4">
+                    <span
+                      className={`
+                        px-3
+                        py-1
+                        rounded-full
+                        text-xs
+                        font-semibold
+                        ${statusBadge[service.status]}
+                      `}
+                    >
+                      {statusMap[service.status]}
+                    </span>
+                  </td>
 
-                <td className="p-4">
-                  {" "}
-                  <button
-                    onClick={() => navigate(`/services/${service._id}`)}
-                    className="
-                    cursor-pointer
+                  <td className="p-4">
+                    {new Intl.DateTimeFormat("es-CO", {
+                      day: "2-digit",
+                      month: "2-digit",
+                      year: "numeric",
+                    }).format(new Date(service.createdAt))}
+                  </td>
+
+                  <td className="p-4">
+                    {" "}
+                    <button
+                      onClick={() => navigate(`/services/${service._id}`)}
+                      className="
+                      flex
+                      items-center
+                      gap-2
                       text-blue-600
                       hover:text-blue-700
-                      transition-colors
+                      font-medium
+                      cursor-pointer
                     "
-                  >
-                    Ver
-                  </button>
-                </td>
-              </motion.tr>
-            ))}
+                    >
+                      <Eye size={16} />
+                      Ver
+                    </button>
+                  </td>
+                </motion.tr>
+              ))
+            )}
           </tbody>
         </motion.table>
       </div>
