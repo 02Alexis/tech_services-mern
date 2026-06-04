@@ -7,5 +7,6 @@ const router = Router();
 
 router.post("/", authMiddleware, upload.single("image"), controller.upload);
 router.get("/:serviceId", authMiddleware, controller.getByService);
+router.delete("/:id", authMiddleware, controller.remove);
 
 export default router;

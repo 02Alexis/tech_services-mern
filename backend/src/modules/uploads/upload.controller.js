@@ -1,4 +1,4 @@
-import { getImages, uploadImage } from "./upload.service.js";
+import { getImages, uploadImage, deleteImage } from "./upload.service.js";
 
 export const upload = async (req, res) => {
   try {
@@ -11,7 +11,7 @@ export const upload = async (req, res) => {
 
       req.body.description,
 
-      req.body.category
+      req.body.category,
     );
 
     res.status(201).json(image);
@@ -29,6 +29,18 @@ export const getByService = async (req, res) => {
     res.json(images);
   } catch (error) {
     res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+export const remove = async (req, res) => {
+  try {
+    const result = await deleteImage(req.params.id);
+
+    res.json(result);
+  } catch (error) {
+    res.status(400).json({
       message: error.message,
     });
   }
