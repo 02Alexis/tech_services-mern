@@ -10,6 +10,8 @@ export const upload = async (req, res) => {
       req.user.id,
 
       req.body.description,
+
+      req.body.category
     );
 
     res.status(201).json(image);

@@ -1,7 +1,7 @@
 import cloudinary from "../../config/cloudinary.js";
 import ServiceImage from "./serviceImage.model.js";
 
-export const uploadImage = async (file, serviceOrder, userId, description) => {
+export const uploadImage = async (file, serviceOrder, userId, description, category) => {
   const result = await new Promise((resolve, reject) => {
     cloudinary.uploader
       .upload_stream(
@@ -26,6 +26,8 @@ export const uploadImage = async (file, serviceOrder, userId, description) => {
     publicId: result.public_id,
 
     description,
+
+    category,
 
     uploadedBy: userId,
   });
