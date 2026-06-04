@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { fieldLabels } from "../config/fieldLabels";
 import {
   getServiceById,
   updateService,
@@ -22,13 +23,19 @@ const EditServicePage = () => {
 
       setService(data);
 
-      reset({
+      const initialValues = {
         customerName: data.customer?.name,
 
         customerPhone: data.customer?.phone,
 
         description: data.description,
+      };
+
+      Object.entries(data.formData || {}).forEach(([key, value]) => {
+        initialValues[key] = value;
       });
+
+      reset(initialValues);
     };
 
     load();
@@ -36,6 +43,14 @@ const EditServicePage = () => {
 
   const onSubmit = async (formData) => {
     try {
+      const dynamicFields = {};
+
+      service.equipmentType.sections.forEach((section) => {
+        section.fields.forEach((field) => {
+          dynamicFields[field] = formData[field];
+        });
+      });
+
       await updateService(id, {
         customer: {
           name: formData.customerName,
@@ -44,6 +59,8 @@ const EditServicePage = () => {
         },
 
         description: formData.description,
+
+        formData: dynamicFields,
       });
 
       toast.success("Orden actualizada");
@@ -127,6 +144,44 @@ const EditServicePage = () => {
             "
           />
         </div>
+
+        {service.equipmentType?.sections?.map((section) => (
+          <div key={section.title} className="mt-6">
+            <h3
+              className="
+          text-lg
+          font-semibold
+          mb-4
+        "
+            >
+              {section.title}
+            </h3>
+
+            <div
+              className="
+          grid
+          md:grid-cols-2
+          gap-4
+        "
+            >
+              {section.fields.map((field) => (
+                <div key={field}>
+                  <label>{fieldLabels[field] || field}</label>
+
+                  <input
+                    {...register(field)}
+                    className="
+                  w-full
+                  border
+                  rounded-lg
+                  p-2
+                "
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
 
         <button
           type="submit"
