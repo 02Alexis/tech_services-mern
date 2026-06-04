@@ -1,13 +1,12 @@
 import { useState } from "react";
-
 import toast from "react-hot-toast";
-
 import { uploadImage } from "../features/uploads/upload.api";
 
 const UploadImageForm = ({ serviceId, onSuccess }) => {
   const [file, setFile] = useState(null);
 
   const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("reception");
 
   const handleUpload = async (e) => {
     e.preventDefault();
@@ -20,10 +19,9 @@ const UploadImageForm = ({ serviceId, onSuccess }) => {
       const formData = new FormData();
 
       formData.append("image", file);
-
       formData.append("serviceOrder", serviceId);
-
       formData.append("description", description);
+      formData.append("category", category);
 
       await uploadImage(formData);
 
@@ -32,6 +30,7 @@ const UploadImageForm = ({ serviceId, onSuccess }) => {
       setFile(null);
 
       setDescription("");
+      setCategory("reception");
 
       onSuccess();
     } catch {
@@ -57,6 +56,15 @@ const UploadImageForm = ({ serviceId, onSuccess }) => {
       >
         Subir Evidencia
       </h3>
+      <select value={category} onChange={(e) => setCategory(e.target.value)}>
+        <option value="reception">Recepción</option>
+
+        <option value="diagnostic">Diagnóstico</option>
+
+        <option value="repair">Reparación</option>
+
+        <option value="delivery">Entrega</option>
+      </select>
 
       <input
         type="file"
