@@ -1,3 +1,5 @@
+import { getImages, uploadImage } from "./upload.service.js";
+
 export const upload = async (req, res) => {
   try {
     const image = await uploadImage(
@@ -19,7 +21,13 @@ export const upload = async (req, res) => {
 };
 
 export const getByService = async (req, res) => {
-  const images = await getImages(req.params.serviceId);
+  try {
+    const images = await getImages(req.params.serviceId);
 
-  res.json(images);
+    res.json(images);
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
 };
