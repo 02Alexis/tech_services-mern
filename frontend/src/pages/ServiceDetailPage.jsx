@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import {
   getServiceById,
@@ -12,6 +13,7 @@ import Spinner from "../components/Spinner";
 import { statusLabels } from "../utils/statusLabels";
 
 const ServiceDetailPage = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
 
   const [service, setService] = useState(null);
@@ -120,15 +122,15 @@ const ServiceDetailPage = () => {
     <div className="space-y-6">
       {/* Header */}
       <div
-  className="
+        className="
     bg-white
     border
     rounded-xl
     p-6
   "
->
-  <div
-    className="
+      >
+        <div
+          className="
       flex
       flex-col
       md:flex-row
@@ -136,44 +138,57 @@ const ServiceDetailPage = () => {
       md:justify-between
       gap-4
     "
-  >
-    <div>
-      <h1
-        className="
+        >
+          <div>
+            <h1
+              className="
           text-2xl
           font-bold
         "
-      >
-        {service.code}
-      </h1>
+            >
+              {service.code}
+            </h1>
 
-      <p
-        className="
+            <p
+              className="
           text-slate-500
           mt-2
         "
-      >
-        {service.equipmentType?.name}
-      </p>
-    </div>
+            >
+              {service.equipmentType?.name}
+            </p>
+          </div>
 
-    <button
-      onClick={
-        handleDownloadPdf
-      }
-      className="
-        bg-red-600
-        hover:bg-red-700
-        text-white
-        px-5
-        py-2
-        rounded-lg
-      "
-    >
-      Descargar PDF
-    </button>
-  </div>
-</div>
+          <button
+            onClick={handleDownloadPdf}
+            className="
+              bg-red-600
+              hover:bg-red-700
+              text-white
+              px-5
+              py-2
+              rounded-lg
+              cursor-pointer
+            "
+          >
+            Descargar PDF
+          </button>
+          <button
+            onClick={() => navigate(`/services/${service._id}/edit`)}
+            className="
+              bg-amber-500
+              hover:bg-amber-600
+              text-white
+              px-5
+              py-2
+              rounded-lg
+              cursor-pointer
+            "
+          >
+            Editar
+          </button>
+        </div>
+      </div>
 
       {/* Cliente */}
       <div

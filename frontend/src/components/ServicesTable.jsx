@@ -60,12 +60,22 @@ const ServicesTable = ({ services }) => {
                 </td>
               </tr>
             ) : (
-              services.map((service) => (
+              services.map((service, index) => (
                 <motion.tr
                   key={service._id}
                   className="hover:bg-slate-50"
-                  initial="hidden"
-                  animate="visible"
+                  initial={{
+                    opacity: 0,
+                    y: 15,
+                  }}
+                  animate={{
+                    opacity: 1,
+                    y: 0,
+                  }}
+                  transition={{
+                    duration: 0.3,
+                    delay: index * 0.08,
+                  }}
                 >
                   <td className="p-4">{service.code}</td>
                   <td className="p-4">{service.customer?.name}</td>

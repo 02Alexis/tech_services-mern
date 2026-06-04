@@ -7,6 +7,7 @@ import EquipmentTypesPage from "../pages/EquipmentTypesPage";
 import UsersPage from "../pages/UsersPage";
 import CreateServicePage from "../pages/CreateServicePage";
 import ServiceDetailPage from "../pages/ServiceDetailPage";
+import EditServicePage from "../pages/EditServicePage";
 
 import ProtectedRoute from "./ProtectedRoute";
 import MainLayout from "../layouts/MainLayout";
@@ -28,6 +29,7 @@ export default function AppRoutes() {
 
           <Route path="/services" element={<ServicesPage />} />
           <Route path="/services/:id" element={<ServiceDetailPage />} />
+          <Route path="/services/:id/edit" element={<EditServicePage />} />
 
           <Route path="/equipment-types" element={<EquipmentTypesPage />} />
 
