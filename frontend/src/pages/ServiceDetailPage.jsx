@@ -500,7 +500,7 @@ const ServiceDetailPage = () => {
           mt-6
         "
       >
-        <ServiceImages images={images} />
+        <ServiceImages images={images} reloadImages={reloadImages} />
       </div>
     </div>
   );

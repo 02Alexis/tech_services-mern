@@ -15,3 +15,9 @@ export const getImages = async (serviceId) => {
 
   return response.data;
 };
+
+export const deleteImage = async (id) => {
+  const { data } = await api.delete(`/uploads/${id}`);
+
+  return data;
+};
