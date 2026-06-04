@@ -1,22 +1,26 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import toast from "react-hot-toast";
 import {
   getServiceById,
   updateServiceStatus,
   createObservation,
   downloadPdf,
 } from "../features/services/service.api";
-import { fieldLabels } from "../config/fieldLabels";
-import toast from "react-hot-toast";
-import Spinner from "../components/Spinner";
 import { statusLabels } from "../utils/statusLabels";
+import { fieldLabels } from "../config/fieldLabels";
+import useImages from "../features/uploads/useImages";
+import UploadImageForm from "../components/UploadImageForm";
+import Spinner from "../components/Spinner";
+import ServiceImages from "../components/ServiceImages";
 
 const ServiceDetailPage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
   const [service, setService] = useState(null);
+  const { images, reloadImages } = useImages(id);
   const [observation, setObservation] = useState("");
   const [loading, setLoading] = useState(true);
 
@@ -123,28 +127,28 @@ const ServiceDetailPage = () => {
       {/* Header */}
       <div
         className="
-    bg-white
-    border
-    rounded-xl
-    p-6
-  "
+          bg-white
+          border
+          rounded-xl
+          p-6
+        "
       >
         <div
           className="
-      flex
-      flex-col
-      md:flex-row
-      md:items-center
-      md:justify-between
-      gap-4
-    "
+            flex
+            flex-col
+            md:flex-row
+            md:items-center
+            md:justify-between
+            gap-4
+          "
         >
           <div>
             <h1
               className="
-          text-2xl
-          font-bold
-        "
+                text-2xl
+                font-bold
+              "
             >
               {service.code}
             </h1>
@@ -481,6 +485,22 @@ const ServiceDetailPage = () => {
         >
           Agregar Observación
         </button>
+      </div>
+
+      <div
+        className="
+          mt-8
+        "
+      >
+        <UploadImageForm serviceId={id} onSuccess={reloadImages} />
+      </div>
+
+      <div
+        className="
+          mt-6
+        "
+      >
+        <ServiceImages images={images} />
       </div>
     </div>
   );
