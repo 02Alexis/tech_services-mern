@@ -101,6 +101,9 @@ const ServiceImages = ({ images, reloadImages }) => {
                     >
                       {image.description}
                     </p>
+                    <p className="text-xs text-gray-500">
+                      {new Date(image.createdAt).toLocaleString()}
+                    </p>
 
                     <button
                       onClick={() => handleDelete(image._id)}
