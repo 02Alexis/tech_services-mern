@@ -1,5 +1,6 @@
 import ServiceOrder from "./service.model.js";
 import { createNotification } from "../notifications/notification.service.js";
+import serviceImageModel from "../uploads/serviceImage.model.js";
 
 export const createService = async (data) => {
   return await ServiceOrder.create(data);
@@ -14,9 +15,35 @@ export const getServices = async () => {
 };
 
 export const getServiceById = async (id) => {
-  return await ServiceOrder.findById(id)
+  const service = await ServiceOrder.findById(id)
     .populate("equipmentType")
     .populate("createdBy", "name email");
+
+  if (!service) {
+    return null;
+  }
+
+  const images = await serviceImageModel.find({
+    serviceOrder: service._id,
+  });
+
+  const categoryOrder = {
+    reception: 1,
+    diagnostic: 2,
+    repair: 3,
+    delivery: 4,
+  };
+
+  images.sort(
+    (a, b) =>
+      categoryOrder[a.category] -
+      categoryOrder[b.category]
+  );
+
+  return {
+    ...service.toObject(),
+    images,
+  };
 };
 
 export const updateService = async (id, data) => {
@@ -291,8 +318,36 @@ export const getTimeline = async (serviceId) => {
 };
 
 export const getServiceByCode = async (code) => {
-  return await ServiceOrder.findOne({
+  const service = await ServiceOrder.findOne({
     code,
     isDeleted: false,
-  }).populate("equipmentType", "name");
+  })
+    .populate("equipmentType", "name")
+    .populate("timeline.user", "name");
+
+  if (!service) {
+    return null;
+  }
+
+  const images = await serviceImageModel.find({
+    serviceOrder: service._id,
+  });
+
+  const categoryOrder = {
+    reception: 1,
+    diagnostic: 2,
+    repair: 3,
+    delivery: 4,
+  };
+
+  images.sort(
+    (a, b) =>
+      categoryOrder[a.category] -
+      categoryOrder[b.category]
+  );
+
+  return {
+    ...service.toObject(),
+    images,
+  };
 };
