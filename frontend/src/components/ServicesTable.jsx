@@ -1,11 +1,30 @@
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { statusMap } from "../utils/serviceStatus";
 import { motion } from "framer-motion";
 import { statusBadge } from "../utils/statusBadge";
 import { Eye } from "lucide-react";
+import { deleteService } from "../features/services/service.api";
 
 const ServicesTable = ({ services }) => {
   const navigate = useNavigate();
+
+  const handleDelete = async (serviceId) => {
+    const confirmDelete = window.confirm("¿Eliminar esta orden?");
+
+    if (!confirmDelete) {
+      return;
+    }
+
+    try {
+      await deleteService(serviceId);
+
+      toast.success("Orden eliminada");
+
+    } catch {
+      toast.error("Error al eliminar");
+    }
+  };
 
   return (
     <motion.div
@@ -120,6 +139,15 @@ const ServicesTable = ({ services }) => {
                     >
                       <Eye size={16} />
                       Ver
+                    </button>
+                    <button
+                      onClick={() => handleDelete(service._id)}
+                      className="
+                      text-red-600
+                      cursor-pointer
+                    "
+                    >
+                      Eliminar
                     </button>
                   </td>
                 </motion.tr>

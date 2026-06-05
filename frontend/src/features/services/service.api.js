@@ -60,3 +60,9 @@ export const searchServices = async (page = 1, search = "", status = "") => {
 
   return response.data;
 };
+
+export const deleteService = async (id) => {
+  const response = await api.delete(`/services/${id}`);
+
+  return response.data;
+};
