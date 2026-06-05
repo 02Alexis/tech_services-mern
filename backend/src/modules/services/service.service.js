@@ -33,7 +33,7 @@ export const deleteService = async (id, userId) => {
       updatedBy: userId,
     },
     {
-      returnDocument: "after"
+      returnDocument: "after",
     },
   );
 };
@@ -128,6 +128,68 @@ export const getDashboardStats = async () => {
     },
   });
 
+  const servicesByType = await ServiceOrder.aggregate([
+    {
+      $match: {
+        isDeleted: false,
+
+        equipmentType: {
+          $ne: null,
+        },
+      },
+    },
+
+    {
+      $group: {
+        _id: "$equipmentType",
+
+        total: {
+          $sum: 1,
+        },
+      },
+    },
+
+    {
+      $lookup: {
+        from: "equipmenttypes",
+        localField: "_id",
+        foreignField: "_id",
+        as: "equipment",
+      },
+    },
+
+    {
+      $unwind: "$equipment",
+    },
+
+    {
+      $project: {
+        total: 1,
+
+        name: "$equipment.name",
+      },
+    },
+
+    {
+      $sort: {
+        total: -1,
+      },
+    },
+
+    {
+      $limit: 5,
+    },
+  ]);
+
+  const latestServices = await ServiceOrder.find({
+  isDeleted: false,
+})
+  .sort({
+    createdAt: -1,
+  })
+  .limit(5)
+  .select("code customer status createdAt");
+
   return {
     totalServices,
     entry,
@@ -136,6 +198,8 @@ export const getDashboardStats = async () => {
     finalized,
     todayEntries,
     monthEntries,
+    servicesByType,
+    latestServices,
   };
 };
 
