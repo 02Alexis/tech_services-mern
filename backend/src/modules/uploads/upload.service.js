@@ -1,5 +1,6 @@
 import cloudinary from "../../config/cloudinary.js";
 import ServiceImage from "./serviceImage.model.js";
+import { createNotification } from "../notifications/notification.service.js";
 
 export const uploadImage = async (
   file,
@@ -24,7 +25,7 @@ export const uploadImage = async (
       .end(file.buffer);
   });
 
-  return await ServiceImage.create({
+  const image = await ServiceImage.create({
     serviceOrder,
 
     url: result.secure_url,
@@ -37,6 +38,15 @@ export const uploadImage = async (
 
     uploadedBy: userId,
   });
+
+  await createNotification(
+    "Nueva imagen",
+    `${image.serviceOrder} tiene una nueva imagen`,
+    "image",
+    image.serviceOrder,
+  );
+
+  return image;
 };
 
 export const getImages = async (serviceOrder) => {

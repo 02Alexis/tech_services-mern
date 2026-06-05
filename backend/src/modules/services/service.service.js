@@ -1,4 +1,5 @@
 import ServiceOrder from "./service.model.js";
+import { createNotification } from "../notifications/notification.service.js";
 
 export const createService = async (data) => {
   return await ServiceOrder.create(data);
@@ -59,6 +60,13 @@ export const updateStatus = async (serviceId, status, userId) => {
 
   await service.save();
 
+  await createNotification(
+    "Estado actualizado",
+    `${service.code} pasó a ${status}`,
+    "status",
+    service._id,
+  );
+
   return service;
 };
 
@@ -71,6 +79,13 @@ export const addObservation = async (serviceId, text) => {
   });
 
   await service.save();
+
+  await createNotification(
+    "Nueva observación",
+    `${service.code} tiene una nueva observación`,
+    "observation",
+    service._id,
+  );
 
   return service;
 };

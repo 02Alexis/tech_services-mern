@@ -8,6 +8,7 @@ import authRoutes from "./modules/auth/auth.routes.js";
 import { env } from "./config/env.js";
 import { errorMiddleware } from "./middlewares/error.middleware.js";
 import uploadRoutes from "./modules/uploads/upload.routes.js";
+import notificationRoutes from "./modules/notifications/notification.routes.js";
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/equipment-types", equipmentTypeRoutes);
 app.use("/api/services", serviceRoutes);
 app.use("/api/uploads", uploadRoutes);
+app.use("/api/notifications", notificationRoutes);
 
 app.use(errorMiddleware);
 
