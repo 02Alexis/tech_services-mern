@@ -11,11 +11,14 @@ import {
   search,
   timeline,
   downloadPdf,
+  tracking,
 } from "./service.controller.js";
 import { authMiddleware } from "../../middlewares/auth.middleware.js";
 import { roleMiddleware } from "../../middlewares/role.middleware.js";
 
 const router = Router();
+
+router.get("/tracking/:code", tracking);
 
 router.use(authMiddleware);
 

@@ -289,3 +289,10 @@ export const getTimeline = async (serviceId) => {
 
   return result;
 };
+
+export const getServiceByCode = async (code) => {
+  return await ServiceOrder.findOne({
+    code,
+    isDeleted: false,
+  }).populate("equipmentType", "name");
+};

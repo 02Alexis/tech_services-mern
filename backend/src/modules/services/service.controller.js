@@ -138,3 +138,21 @@ export const downloadPdf = async (req, res) => {
 
   await generateServicePdf(service, res);
 };
+
+export const tracking = async (req, res) => {
+  try {
+    const service = await serviceModule.getServiceByCode(req.params.code);
+
+    if (!service) {
+      return res.status(404).json({
+        message: "Orden no encontrada",
+      });
+    }
+
+    res.json(service);
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
