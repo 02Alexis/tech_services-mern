@@ -1,5 +1,4 @@
 import { Router } from "express";
-
 import {
   create,
   getAll,
@@ -11,12 +10,10 @@ import {
   dashboard,
   search,
   timeline,
-  downloadPdf
+  downloadPdf,
 } from "./service.controller.js";
-
-import {
-  authMiddleware
-} from "../../middlewares/auth.middleware.js";
+import { authMiddleware } from "../../middlewares/auth.middleware.js";
+import { roleMiddleware } from "../../middlewares/role.middleware.js";
 
 const router = Router();
 
@@ -42,6 +39,6 @@ router.post("/", create);
 
 router.put("/:id", update);
 
-router.delete("/:id", remove);
+router.delete("/:id", roleMiddleware("admin"), remove);
 
 export default router;
