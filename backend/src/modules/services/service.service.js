@@ -120,6 +120,14 @@ export const getDashboardStats = async () => {
     },
   });
 
+  const finalizedToday = await ServiceOrder.countDocuments({
+    status: "finalized",
+
+    finalizedAt: {
+      $gte: today,
+    },
+  });
+
   const firstDayMonth = new Date(today.getFullYear(), today.getMonth(), 1);
 
   const monthEntries = await ServiceOrder.countDocuments({
@@ -182,13 +190,13 @@ export const getDashboardStats = async () => {
   ]);
 
   const latestServices = await ServiceOrder.find({
-  isDeleted: false,
-})
-  .sort({
-    createdAt: -1,
+    isDeleted: false,
   })
-  .limit(5)
-  .select("code customer status createdAt");
+    .sort({
+      createdAt: -1,
+    })
+    .limit(5)
+    .select("code customer status createdAt");
 
   return {
     totalServices,
@@ -197,6 +205,7 @@ export const getDashboardStats = async () => {
     wait,
     finalized,
     todayEntries,
+    finalizedToday,
     monthEntries,
     servicesByType,
     latestServices,
