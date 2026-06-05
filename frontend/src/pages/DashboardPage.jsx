@@ -3,6 +3,7 @@ import StatCard from "../components/StatCard";
 import { motion } from "framer-motion";
 import Spinner from "../components/Spinner";
 import TopEquipmentCard from "../components/TopEquipmentCard";
+import StatusChart from "../components/StatusChart";
 
 export default function DashboardPage() {
   const { data, loading } = useDashboard();
@@ -35,6 +36,10 @@ export default function DashboardPage() {
     {
       title: "Hoy",
       value: data.todayEntries,
+    },
+    {
+      title: "Finalizados Hoy",
+      value: data.finalizedToday,
     },
     {
       title: "Este Mes",
@@ -124,6 +129,7 @@ export default function DashboardPage() {
         </div>
 
         <TopEquipmentCard types={data.servicesByType} />
+        <StatusChart data={data} />
       </motion.div>
     </motion.div>
   );
