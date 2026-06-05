@@ -1,4 +1,5 @@
 import useAuthStore from "../store/authStore";
+import NotificationBell from "./NotificationBell";
 
 export default function Header() {
   const user = useAuthStore((state) => state.user);
@@ -35,6 +36,7 @@ export default function Header() {
           gap-3
         "
       >
+        <NotificationBell />
         <div
           className="
             h-10
