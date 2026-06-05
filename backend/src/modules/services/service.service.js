@@ -5,7 +5,9 @@ export const createService = async (data) => {
 };
 
 export const getServices = async () => {
-  return await ServiceOrder.find()
+  return await ServiceOrder.find({
+    isDeleted: false,
+  })
     .populate("equipmentType", "name slug")
     .populate("createdBy", "name email");
 };
@@ -30,7 +32,7 @@ export const deleteService = async (id, userId) => {
       updatedBy: userId,
     },
     {
-      new: true,
+      returnDocument: "after"
     },
   );
 };
@@ -129,7 +131,9 @@ export const searchServices = async (
   search = "",
   status = "",
 ) => {
-  const query = {};
+  const query = {
+    isDeleted: false,
+  };
 
   if (status) {
     query.status = status;
