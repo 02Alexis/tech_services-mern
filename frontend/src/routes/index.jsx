@@ -8,6 +8,7 @@ import UsersPage from "../pages/UsersPage";
 import CreateServicePage from "../pages/CreateServicePage";
 import ServiceDetailPage from "../pages/ServiceDetailPage";
 import EditServicePage from "../pages/EditServicePage";
+import TrackingPage from "../pages/TrackingPage";
 
 import ProtectedRoute from "./ProtectedRoute";
 import AdminRoute from "./AdminRoute";
@@ -19,6 +20,8 @@ export default function AppRoutes() {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
 
+        <Route path="/tracking" element={<TrackingPage />} />
+        
         <Route
           element={
             <ProtectedRoute>
