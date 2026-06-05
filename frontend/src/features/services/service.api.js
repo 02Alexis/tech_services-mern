@@ -47,3 +47,16 @@ export const updateService = async (id, data) => {
 
   return response.data;
 };
+
+export const searchServices = async (page = 1, search = "", status = "") => {
+  const response = await api.get("/services/search", {
+    params: {
+      page,
+      limit: 10,
+      search,
+      status: status === "all" ? "" : status,
+    },
+  });
+
+  return response.data;
+};

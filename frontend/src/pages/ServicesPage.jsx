@@ -4,15 +4,16 @@ import useServices from "../features/services/useServices";
 import ServicesTable from "../components/ServicesTable";
 import ServiceFilters from "../components/ServiceFilters";
 import Spinner from "../components/Spinner";
+import Pagination from "../components/Pagination";
 
 export default function ServicesPage() {
   const navigate = useNavigate();
-  const { services, loading, search, setSearch, status, setStatus } =
+  const { services, loading, search, setSearch, status, setStatus, page, setPage, pagination } =
     useServices();
 
-  if (loading) {
-    return <Spinner />;
-  }
+  if (loading && services.length === 0) {
+  return <Spinner />;
+}
 
   return (
     <motion.div
@@ -71,6 +72,7 @@ export default function ServicesPage() {
         {services.length} resultado(s)
       </p>
       <ServicesTable services={services} />
+      <Pagination page={page} setPage={setPage} pagination={pagination} />
     </motion.div>
   );
 }

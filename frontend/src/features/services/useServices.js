@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getServices } from "./service.api";
+import { getServices, searchServices } from "./service.api";
 
 export default function useServices() {
   const [services, setServices] = useState([]);
@@ -8,42 +8,45 @@ export default function useServices() {
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("all");
 
+  const [page, setPage] = useState(1);
+  const [pagination, setPagination] = useState(null);
+
+  const [debouncedSearch, setDebouncedSearch] = useState(search);
+
   useEffect(() => {
-    const load = async () => {
-      try {
-        const data = await getServices();
+    const timeout = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 500);
 
-        setServices(data);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    return () => clearTimeout(timeout);
+  }, [search]);
 
-    load();
-  }, []);
+  useEffect(() => {
+    loadServices();
+  }, [page, debouncedSearch, status]);
 
-  const filteredServices = services.filter((service) => {
-    const searchText = search.toLowerCase();
+  useEffect(() => {
+    setPage(1);
+  }, [search, status]);
 
-    const customerMatch = service.customer?.name
-      ?.toLowerCase()
-      .includes(searchText);
+  const loadServices = async () => {
+    try {
+      setLoading(true);
 
-    const codeMatch = service.code?.toLowerCase().includes(searchText);
+      const response = await searchServices(page, debouncedSearch, status);
 
-    const phoneMatch = service.customer?.phone
-      ?.toLowerCase()
-      .includes(searchText);
+      setServices(response.data);
 
-    const statusMatch = !status || status === "all" ? true : service.status === status;
-
-    return (customerMatch || codeMatch || phoneMatch) && statusMatch;
-  });
+      setPagination(response.pagination);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return {
-    services: filteredServices,
+    services,
 
     loading,
 
@@ -52,5 +55,10 @@ export default function useServices() {
 
     status,
     setStatus,
+
+    page,
+    setPage,
+
+    pagination,
   };
 }
