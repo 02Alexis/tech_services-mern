@@ -1,12 +1,12 @@
-import useAuthStore
-  from "../store/authStore";
+import useAuthStore from "../store/authStore";
 
 export default function Header() {
+  const user = useAuthStore((state) => state.user);
 
-  const user =
-    useAuthStore(
-      state => state.user
-    );
+  const roleLabel = {
+    admin: "Administrador",
+    technician: "Técnico",
+  };
 
   return (
     <header
@@ -66,7 +66,7 @@ export default function Header() {
               text-slate-500
             "
           >
-            {user?.role}
+            {roleLabel[user?.role]}
           </p>
         </div>
       </div>

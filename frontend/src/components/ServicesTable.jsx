@@ -26,6 +26,10 @@ const ServicesTable = ({ services }) => {
     }
   };
 
+  const user = JSON.parse(
+    localStorage.getItem("user")
+  );
+
   return (
     <motion.div
       initial={{ y: 30, opacity: 0 }}
@@ -140,15 +144,17 @@ const ServicesTable = ({ services }) => {
                       <Eye size={16} />
                       Ver
                     </button>
-                    <button
-                      onClick={() => handleDelete(service._id)}
-                      className="
-                      text-red-600
-                      cursor-pointer
-                    "
-                    >
-                      Eliminar
-                    </button>
+                    {user?.role === "admin" && (
+                      <button
+                        onClick={() => handleDelete(service._id)}
+                        className="
+                          text-red-600
+                          cursor-pointer
+                        "
+                      >
+                        Eliminar
+                      </button>
+                    )}
                   </td>
                 </motion.tr>
               ))

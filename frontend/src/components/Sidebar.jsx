@@ -4,8 +4,8 @@ import useAuthStore from "../store/authStore";
 
 export default function Sidebar() {
   const navigate = useNavigate();
-
   const logout = useAuthStore((state) => state.logout);
+  const user = useAuthStore((state) => state.user);
 
   const handleLogout = () => {
     logout();
@@ -65,15 +65,19 @@ export default function Sidebar() {
           Servicios
         </NavLink>
 
-        <NavLink to="/equipment-types" className={linkClass}>
-          <Cpu size={18} />
-          Tipos Equipo
-        </NavLink>
+        {user?.role === "admin" && (
+          <NavLink to="/equipment-types" className={linkClass}>
+            <Cpu size={18} />
+            Tipos Equipo
+          </NavLink>
+        )}
 
-        <NavLink to="/users" className={linkClass}>
-          <Users size={18} />
-          Usuarios
-        </NavLink>
+        {user?.role === "admin" && (
+          <NavLink to="/users" className={linkClass}>
+            <Users size={18} />
+            Usuarios
+          </NavLink>
+        )}
       </nav>
 
       <div

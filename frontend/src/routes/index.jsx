@@ -10,6 +10,7 @@ import ServiceDetailPage from "../pages/ServiceDetailPage";
 import EditServicePage from "../pages/EditServicePage";
 
 import ProtectedRoute from "./ProtectedRoute";
+import AdminRoute from "./AdminRoute";
 import MainLayout from "../layouts/MainLayout";
 
 export default function AppRoutes() {
@@ -31,9 +32,9 @@ export default function AppRoutes() {
           <Route path="/services/:id" element={<ServiceDetailPage />} />
           <Route path="/services/:id/edit" element={<EditServicePage />} />
 
-          <Route path="/equipment-types" element={<EquipmentTypesPage />} />
+          <Route path="/equipment-types" element={<AdminRoute><EquipmentTypesPage /></AdminRoute>} />
 
-          <Route path="/users" element={<UsersPage />} />
+          <Route path="/users" element={<AdminRoute><UsersPage /></AdminRoute>} />
           <Route path="/services/new" element={<CreateServicePage />} />
         </Route>
       </Routes>
