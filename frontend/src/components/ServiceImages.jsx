@@ -8,6 +8,7 @@ const categories = {
   repair: "Reparación",
   delivery: "Entrega",
 };
+const categoryOrder = ["reception", "diagnostic", "repair", "delivery"];
 
 const ServiceImages = ({ images, reloadImages }) => {
   const grouped = images.reduce((acc, image) => {
@@ -45,40 +46,47 @@ const ServiceImages = ({ images, reloadImages }) => {
   return (
     <PhotoProvider>
       <div className="space-y-8">
-        {Object.entries(grouped).map(([category, items]) => (
-          <div key={category}>
-            <h3
-              className="
+        {categoryOrder.map((category) => {
+          const items = grouped[category];
+
+          if (!items?.length) {
+            return null;
+          }
+
+          return (
+            <div key={category}>
+              <h3
+                className="
                 text-lg
                 font-bold
                 mb-4
               "
-            >
-              {categories[category]}
-            </h3>
+              >
+                {categories[category]}
+              </h3>
 
-            <div
-              className="
+              <div
+                className="
                 grid
                 grid-cols-2
                 md:grid-cols-4
                 gap-4
               "
-            >
-              {items.map((image) => (
-                <div
-                  key={image._id}
-                  className="
+              >
+                {items.map((image) => (
+                  <div
+                    key={image._id}
+                    className="
                       border
                       rounded-lg
                       overflow-hidden
                     "
-                >
-                  <PhotoView src={image.url}>
-                    <img
-                      src={image.url}
-                      alt=""
-                      className="
+                  >
+                    <PhotoView src={image.url}>
+                      <img
+                        src={image.url}
+                        alt=""
+                        className="
                         h-48
                         w-full
                         object-cover
@@ -86,43 +94,44 @@ const ServiceImages = ({ images, reloadImages }) => {
                         hover:scale-105
                         transition-transform
                       "
-                    />
-                  </PhotoView>
+                      />
+                    </PhotoView>
 
-                  <div
-                    className="
+                    <div
+                      className="
                         p-2
                       "
-                  >
-                    <p
-                      className="
+                    >
+                      <p
+                        className="
                           text-sm
                         "
-                    >
-                      {image.description}
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      {new Date(image.createdAt).toLocaleString()}
-                    </p>
+                      >
+                        {image.description}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        {new Date(image.createdAt).toLocaleString()}
+                      </p>
 
-                    <button
-                      onClick={() => handleDelete(image._id)}
-                      className="
+                      <button
+                        onClick={() => handleDelete(image._id)}
+                        className="
                       mt-2
                       text-red-600
                       text-sm
                       hover:text-red-700
                       cursor-pointer
                     "
-                    >
-                      Eliminar
-                    </button>
+                      >
+                        Eliminar
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </PhotoProvider>
   );

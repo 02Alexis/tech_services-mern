@@ -122,6 +122,8 @@ const ServiceDetailPage = () => {
     );
   }
 
+  console.log("Images:", service.images);
+
   return (
     <div className="space-y-6">
       {/* Header */}
