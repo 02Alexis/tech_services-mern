@@ -2,11 +2,12 @@ import useDashboard from "../features/dashboard/useDashboard";
 import StatCard from "../components/StatCard";
 import { motion } from "framer-motion";
 import Spinner from "../components/Spinner";
+import TopEquipmentCard from "../components/TopEquipmentCard";
 
 export default function DashboardPage() {
   const { data, loading } = useDashboard();
 
-  if (loading) {
+  if (loading || !data) {
     return <Spinner />;
   }
 
@@ -31,7 +32,16 @@ export default function DashboardPage() {
       title: "Finalizado",
       value: data.finalized,
     },
+    {
+      title: "Hoy",
+      value: data.todayEntries,
+    },
+    {
+      title: "Este Mes",
+      value: data.monthEntries,
+    },
   ];
+  console.log(data);
 
   return (
     <motion.div
@@ -50,7 +60,7 @@ export default function DashboardPage() {
         Dashboard
       </motion.h2>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
         {stats.map((stat, index) => (
           <motion.div
             key={stat.title}
@@ -70,6 +80,51 @@ export default function DashboardPage() {
           </motion.div>
         ))}
       </div>
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="
+          w-full
+          bg-white
+          rounded-xl
+          border
+          p-6
+          mt-8
+        "
+      >
+        <h3
+          className="
+            text-xl
+            font-bold
+            mb-4
+          "
+        >
+          Últimas Órdenes
+        </h3>
+
+        <div className="space-y-3">
+          {data.latestServices?.map((service) => (
+            <div
+              key={service._id}
+              className="
+          flex
+          justify-between
+          border-b
+          pb-2
+        "
+            >
+              <span>{service.code}</span>
+
+              <span>{service.customer?.name}</span>
+
+              <span>{service.status}</span>
+            </div>
+          ))}
+        </div>
+
+        <TopEquipmentCard types={data.servicesByType} />
+      </motion.div>
     </motion.div>
   );
 }
